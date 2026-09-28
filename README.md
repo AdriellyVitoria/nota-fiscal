@@ -13,7 +13,7 @@ Emissor simplificado de Nota Fiscal Eletrônica, construído para praticar Java,
 ## Como rodar
 
 ```shell
-docker compose up -d --build   # PostgreSQL (5433) + SEFAZ no WildFly (8180)
+docker compose up -d --build   # PostgreSQL (5433), SEFAZ no WildFly (8180), Kafka (9092)
 cd nfe-api
 ./mvnw quarkus:dev             # API em http://localhost:8081
 ```
@@ -29,4 +29,6 @@ cd nfe-api
 1. `POST /notas` cria a nota em `RASCUNHO`
 2. `POST /notas/{id}/emitir` gera o XML, valida no XSD e envia via SOAP → `ENVIADA` (202)
 3. O SEFAZ processa pela fila JMS e a API consulta o recibo a cada 5s → `AUTORIZADA` ou `REJEITADA`
-4. `GET /notas/{id}/danfe` mostra o DANFE
+4. Ao autorizar, o evento é gravado no outbox e publicado no tópico Kafka `nfe-autorizada` (3 partições)
+5. O consumidor de auditoria registra o evento — `GET /auditoria`
+6. `GET /notas/{id}/danfe` mostra o DANFE

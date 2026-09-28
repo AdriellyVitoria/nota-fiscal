@@ -1,5 +1,6 @@
 package br.estudo.nfe.nota;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -7,6 +8,8 @@ import org.jboss.logging.Logger;
 
 import br.estudo.nfe.erro.NegocioException;
 import br.estudo.nfe.erro.SefazIndisponivelException;
+import br.estudo.nfe.evento.NotaAutorizadaEvento;
+import br.estudo.nfe.evento.OutboxService;
 import br.estudo.nfe.sefaz.RespostaSefaz;
 import br.estudo.nfe.sefaz.SefazClient;
 import br.estudo.nfe.xml.NotaXmlMapper;
@@ -34,6 +37,9 @@ public class EmissaoService {
 
     @Inject
     SefazClient sefaz;
+
+    @Inject
+    OutboxService outbox;
 
     public NotaFiscal emitir(Long id) {
         NotaFiscal nota = notas.buscar(id);
@@ -105,6 +111,8 @@ public class EmissaoService {
             nota.status = StatusNota.AUTORIZADA;
             nota.protocolo = resposta.protocolo();
             nota.motivo = null;
+            outbox.registrar(NotaAutorizadaEvento.TIPO, nota.chaveAcesso,
+                    NotaAutorizadaEvento.de(nota, OffsetDateTime.now(NotaFiscalService.FUSO_BRASILIA)));
         } else {
             nota.status = StatusNota.REJEITADA;
             nota.motivo = resposta.descricao();
