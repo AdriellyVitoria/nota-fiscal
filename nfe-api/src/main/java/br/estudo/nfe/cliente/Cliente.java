@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-/** Destinatário da nota fiscal (pessoa física com CPF ou jurídica com CNPJ). */
 @Entity
 public class Cliente extends PanacheEntityBase {
 
@@ -15,7 +14,6 @@ public class Cliente extends PanacheEntityBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    /** CPF (11 dígitos) ou CNPJ (14 dígitos), só números. */
     @Column(nullable = false, unique = true, length = 14)
     public String documento;
 

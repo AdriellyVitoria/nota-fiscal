@@ -13,7 +13,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 
-/** Camada HTTP: recebe a requisição, delega ao service e escolhe o status da resposta. */
 @Path("/produtos")
 public class ProdutoResource {
 

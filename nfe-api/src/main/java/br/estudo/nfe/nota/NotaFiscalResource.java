@@ -13,7 +13,9 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/notas")
@@ -22,7 +24,6 @@ public class NotaFiscalResource {
     @Inject
     NotaFiscalService service;
 
-    /** Ex.: GET /notas?status=RASCUNHO&pagina=0&tamanho=20 */
     @GET
     public List<NotaResumoResponse> listar(
             @QueryParam("status") StatusNota status,
@@ -35,6 +36,26 @@ public class NotaFiscalResource {
     @Path("/{id}")
     public NotaResponse buscar(@PathParam("id") Long id) {
         return NotaResponse.de(service.buscar(id));
+    }
+
+    @GET
+    @Path("/{id}/xml")
+    @Produces(MediaType.APPLICATION_XML)
+    public String xml(@PathParam("id") Long id) {
+        return service.xml(id);
+    }
+
+    @GET
+    @Path("/{id}/xml/validacao")
+    public ValidacaoXmlResponse validarXml(@PathParam("id") Long id) {
+        return ValidacaoXmlResponse.de(service.validarXml(id));
+    }
+
+    @GET
+    @Path("/{id}/danfe")
+    @Produces(MediaType.TEXT_HTML)
+    public String danfe(@PathParam("id") Long id) {
+        return service.danfe(id);
     }
 
     @POST

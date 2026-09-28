@@ -2,7 +2,6 @@ package br.estudo.nfe.produto;
 
 import java.math.BigDecimal;
 
-/** O que a API devolve sobre um produto (DTO de saída) — a entidade nunca sai direto. */
 public record ProdutoResponse(
         Long id,
         String codigo,

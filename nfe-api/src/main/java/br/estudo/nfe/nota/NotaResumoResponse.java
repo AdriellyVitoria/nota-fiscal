@@ -3,7 +3,6 @@ package br.estudo.nfe.nota;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-/** Versão resumida (sem itens) para a listagem — mais leve e sem carregar os itens de cada nota. */
 public record NotaResumoResponse(
         Long id,
         Long numero,

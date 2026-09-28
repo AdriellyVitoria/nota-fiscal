@@ -34,7 +34,6 @@ public class ItemNota extends PanacheEntityBase {
     @Column(nullable = false, precision = 15, scale = 4)
     public BigDecimal quantidade;
 
-    /** Cópia do preço no momento da venda: se o produto mudar de preço depois, a nota não muda. */
     @Column(name = "valor_unitario", nullable = false, precision = 15, scale = 2)
     public BigDecimal valorUnitario;
 

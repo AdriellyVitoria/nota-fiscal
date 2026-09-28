@@ -10,10 +10,6 @@ import org.junit.jupiter.api.Test;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 
-/**
- * Teste de integração: sobe o Quarkus de verdade e um Postgres temporário (Dev Services),
- * roda as migrações do Flyway e faz requisições HTTP com RestAssured.
- */
 @QuarkusTest
 class ProdutoResourceTest {
 

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.estudo.br/nfe"
+           targetNamespace="http://www.estudo.br/nfe"
+           elementFormDefault="qualified">
+
+    <xs:element name="NFe" type="TNFe"/>
+
+    <xs:complexType name="TNFe">
+        <xs:sequence>
+            <xs:element name="infNFe" type="TInfNFe"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TInfNFe">
+        <xs:sequence>
+            <xs:element name="ide" type="TIde"/>
+            <xs:element name="emit" type="TEmit"/>
+            <xs:element name="dest" type="TDest"/>
+            <xs:element name="det" type="TDet" minOccurs="1" maxOccurs="990"/>
+            <xs:element name="total" type="TTotal"/>
+        </xs:sequence>
+        <xs:attribute name="versao" type="TVersao" use="required"/>
+        <xs:attribute name="Id" type="TIdNFe" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="TIde">
+        <xs:sequence>
+            <xs:element name="cUF" type="TCodUfIBGE"/>
+            <xs:element name="mod" type="TMod"/>
+            <xs:element name="serie" type="TSerie"/>
+            <xs:element name="nNF" type="TNF"/>
+            <xs:element name="dhEmi" type="TDateTimeUTC"/>
+            <xs:element name="tpAmb" type="TAmb"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TEmit">
+        <xs:sequence>
+            <xs:element name="CNPJ" type="TCnpj"/>
+            <xs:element name="xNome" type="TNome"/>
+            <xs:element name="UF" type="TUf"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TDest">
+        <xs:sequence>
+            <xs:choice>
+                <xs:element name="CNPJ" type="TCnpj"/>
+                <xs:element name="CPF" type="TCpf"/>
+            </xs:choice>
+            <xs:element name="xNome" type="TNome"/>
+            <xs:element name="UF" type="TUf"/>
+            <xs:element name="email" type="TEmail" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TDet">
+        <xs:sequence>
+            <xs:element name="prod" type="TProd"/>
+        </xs:sequence>
+        <xs:attribute name="nItem" type="TNItem" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="TProd">
+        <xs:sequence>
+            <xs:element name="cProd" type="TCodigoProduto"/>
+            <xs:element name="xProd" type="TDescricao"/>
+            <xs:element name="NCM" type="TNcm"/>
+            <xs:element name="CFOP" type="TCfop"/>
+            <xs:element name="uCom" type="TUnidade"/>
+            <xs:element name="qCom" type="TDec_1104"/>
+            <xs:element name="vUnCom" type="TDec_1302"/>
+            <xs:element name="vProd" type="TDec_1302"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TTotal">
+        <xs:sequence>
+            <xs:element name="vNF" type="TDec_1302"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="TVersao">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="1.00"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TIdNFe">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="NFe[0-9]{44}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TCodUfIBGE">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[1-5][0-9]"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TMod">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="55"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TSerie">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="0|[1-9][0-9]{0,2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TNF">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[1-9][0-9]{0,8}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TDateTimeUTC">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="20[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9][\-\+][01][0-9]:[0-5][0-9]"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TAmb">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TCnpj">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{14}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TCpf">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{11}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TNome">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="2"/>
+            <xs:maxLength value="60"/>
+            <xs:pattern value="[!-ÿ]{1}[ -ÿ]{0,}[!-ÿ]{1}|[!-ÿ]{1}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TDescricao">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="120"/>
+            <xs:pattern value="[!-ÿ]{1}[ -ÿ]{0,}[!-ÿ]{1}|[!-ÿ]{1}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TEmail">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="60"/>
+            <xs:pattern value="[^@\s]+@[^@\s]+\.[^@\s]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TUf">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="AC"/><xs:enumeration value="AL"/><xs:enumeration value="AM"/>
+            <xs:enumeration value="AP"/><xs:enumeration value="BA"/><xs:enumeration value="CE"/>
+            <xs:enumeration value="DF"/><xs:enumeration value="ES"/><xs:enumeration value="GO"/>
+            <xs:enumeration value="MA"/><xs:enumeration value="MG"/><xs:enumeration value="MS"/>
+            <xs:enumeration value="MT"/><xs:enumeration value="PA"/><xs:enumeration value="PB"/>
+            <xs:enumeration value="PE"/><xs:enumeration value="PI"/><xs:enumeration value="PR"/>
+            <xs:enumeration value="RJ"/><xs:enumeration value="RN"/><xs:enumeration value="RO"/>
+            <xs:enumeration value="RR"/><xs:enumeration value="RS"/><xs:enumeration value="SC"/>
+            <xs:enumeration value="SE"/><xs:enumeration value="SP"/><xs:enumeration value="TO"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TNItem">
+        <xs:restriction base="xs:positiveInteger">
+            <xs:maxInclusive value="990"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TCodigoProduto">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="60"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TNcm">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{8}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TCfop">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[1-7][0-9]{3}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TUnidade">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="6"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TDec_1104">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="0|0\.[0-9]{1,4}|[1-9][0-9]{0,10}(\.[0-9]{1,4})?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TDec_1302">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="0|0\.[0-9]{2}|[1-9][0-9]{0,12}(\.[0-9]{2})?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

@@ -48,7 +48,6 @@ public class NotaFiscal extends PanacheEntityBase {
     @JoinColumn(name = "cliente_id")
     public Cliente cliente;
 
-    /** A nota "manda" nos itens: salvar/remover a nota salva/remove os itens (cascade). */
     @OneToMany(mappedBy = "nota", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<ItemNota> itens = new ArrayList<>();
 
@@ -58,11 +57,9 @@ public class NotaFiscal extends PanacheEntityBase {
     @Column(name = "data_emissao", nullable = false)
     public OffsetDateTime dataEmissao;
 
-    /** Número do protocolo de autorização devolvido pelo SEFAZ. */
     @Column(length = 20)
     public String protocolo;
 
-    /** Motivo da rejeição, quando houver. */
     @Column(length = 255)
     public String motivo;
 
@@ -77,10 +74,6 @@ public class NotaFiscal extends PanacheEntityBase {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    /**
-     * Busca a nota já com cliente, itens e produtos numa única query (JOIN FETCH),
-     * evitando o problema N+1 (uma query extra para cada item).
-     */
     public static Optional<NotaFiscal> buscarCompleta(Long id) {
         return find("""
                 select distinct n from NotaFiscal n
@@ -91,7 +84,6 @@ public class NotaFiscal extends PanacheEntityBase {
                 .firstResultOptional();
     }
 
-    /** Listagem paginada (com filtro opcional de status), trazendo o cliente junto. */
     public static List<NotaFiscal> listar(StatusNota status, int pagina, int tamanho) {
         String base = "select n from NotaFiscal n join fetch n.cliente";
         var query = (status == null)

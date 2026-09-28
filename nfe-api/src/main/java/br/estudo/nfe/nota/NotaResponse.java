@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** Nota completa, com itens (usada no detalhe e na criação). */
 public record NotaResponse(
         Long id,
         Long numero,

@@ -8,7 +8,6 @@ import br.estudo.nfe.nota.ItemNota;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
-/** Regras de negócio de produto. Um único objeto para a aplicação inteira (@ApplicationScoped). */
 @ApplicationScoped
 public class ProdutoService {
 
@@ -41,7 +40,6 @@ public class ProdutoService {
                     throw new NegocioException("Já existe produto com o código " + dados.codigo());
                 });
         copiar(dados, produto);
-        // Sem "save": a entidade está gerenciada, o Hibernate grava as mudanças no fim da transação
         return produto;
     }
 

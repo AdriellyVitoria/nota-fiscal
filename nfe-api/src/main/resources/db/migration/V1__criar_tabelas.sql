@@ -16,7 +16,6 @@ create table cliente (
     email      varchar(120)
 );
 
--- Numeração da nota gerada pelo banco: atômica, sem condição de corrida entre instâncias
 create sequence nota_numero_seq;
 
 create table nota_fiscal (

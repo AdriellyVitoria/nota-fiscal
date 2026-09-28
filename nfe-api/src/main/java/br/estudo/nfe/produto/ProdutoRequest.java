@@ -9,7 +9,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-/** Dados que o cliente da API envia para criar/alterar um produto (DTO de entrada). */
 public record ProdutoRequest(
         @NotBlank @Size(max = 20) String codigo,
         @NotBlank @Size(max = 120) String descricao,

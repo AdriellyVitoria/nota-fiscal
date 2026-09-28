@@ -10,10 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-/**
- * Entidade JPA no padrão Active Record do Panache: a própria classe tem os métodos de consulta
- * (Produto.findById, Produto.listAll...). Campos públicos: o Quarkus gera getters/setters no build.
- */
 @Entity
 public class Produto extends PanacheEntityBase {
 
@@ -27,11 +23,9 @@ public class Produto extends PanacheEntityBase {
     @Column(nullable = false, length = 120)
     public String descricao;
 
-    /** Nomenclatura Comum do Mercosul: classificação fiscal da mercadoria (8 dígitos). */
     @Column(nullable = false, length = 8)
     public String ncm;
 
-    /** Código Fiscal de Operações e Prestações (ex.: 5102 = venda dentro do estado). */
     @Column(nullable = false, length = 4)
     public String cfop;
 
