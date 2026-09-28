@@ -7,6 +7,7 @@ import java.util.List;
 
 import br.estudo.nfe.cliente.Cliente;
 import br.estudo.nfe.cliente.ClienteService;
+import br.estudo.nfe.consulta.ConsultaStatusService;
 import br.estudo.nfe.config.EmitenteConfig;
 import br.estudo.nfe.erro.NegocioException;
 import br.estudo.nfe.erro.RecursoNaoEncontradoException;
@@ -15,6 +16,7 @@ import br.estudo.nfe.xml.DanfeService;
 import br.estudo.nfe.xml.NotaXmlMapper;
 import br.estudo.nfe.xml.XmlService;
 import io.quarkus.hibernate.orm.panache.Panache;
+import io.quarkus.narayana.jta.QuarkusTransaction;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -40,6 +42,9 @@ public class NotaFiscalService {
 
     @Inject
     DanfeService danfeService;
+
+    @Inject
+    ConsultaStatusService consultaStatus;
 
     public List<NotaFiscal> listar(StatusNota status, int pagina, int tamanho) {
         return NotaFiscal.listar(status, pagina, tamanho);
@@ -86,13 +91,16 @@ public class NotaFiscalService {
         return danfeService.gerarHtml(xml(id));
     }
 
-    @Transactional
     public void excluir(Long id) {
-        NotaFiscal nota = buscar(id);
-        if (nota.status != StatusNota.RASCUNHO) {
-            throw new NegocioException("Só é possível excluir nota em RASCUNHO (status atual: " + nota.status + ")");
-        }
-        nota.delete();
+        String chaveAcesso = QuarkusTransaction.requiringNew().call(() -> {
+            NotaFiscal nota = buscar(id);
+            if (nota.status != StatusNota.RASCUNHO) {
+                throw new NegocioException("Só é possível excluir nota em RASCUNHO (status atual: " + nota.status + ")");
+            }
+            nota.delete();
+            return nota.chaveAcesso;
+        });
+        consultaStatus.invalidar(chaveAcesso);
     }
 
     private long proximoNumero() {

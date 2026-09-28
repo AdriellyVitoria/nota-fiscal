@@ -18,6 +18,15 @@ services:
       - "8180:8080"
       - "9991:9990"
 
+  infinispan:
+    image: quay.io/infinispan/server:latest
+    container_name: nfe-infinispan
+    environment:
+      USER: admin
+      PASS: admin
+    ports:
+      - "11222:11222"
+
   kafka:
     image: apache/kafka:latest
     container_name: nfe-kafka

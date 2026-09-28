@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.jboss.logging.Logger;
 
+import br.estudo.nfe.consulta.ConsultaStatusService;
 import br.estudo.nfe.erro.NegocioException;
 import br.estudo.nfe.erro.SefazIndisponivelException;
 import br.estudo.nfe.evento.NotaAutorizadaEvento;
@@ -41,6 +42,9 @@ public class EmissaoService {
     @Inject
     OutboxService outbox;
 
+    @Inject
+    ConsultaStatusService consultaStatus;
+
     public NotaFiscal emitir(Long id) {
         NotaFiscal nota = notas.buscar(id);
         if (!PODE_EMITIR.contains(nota.status)) {
@@ -61,10 +65,12 @@ public class EmissaoService {
             throw new SefazIndisponivelException(e);
         }
 
-        return QuarkusTransaction.requiringNew().call(() -> {
+        NotaFiscal atualizada = QuarkusTransaction.requiringNew().call(() -> {
             registrarEnvio(id, xml, resposta);
             return NotaFiscal.buscarCompleta(id).orElseThrow();
         });
+        consultaStatus.invalidar(atualizada.chaveAcesso);
+        return atualizada;
     }
 
     @Scheduled(every = "{nfe.sefaz.intervalo-consulta}", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
@@ -88,7 +94,8 @@ public class EmissaoService {
         if (resposta.emProcessamento()) {
             return;
         }
-        QuarkusTransaction.requiringNew().run(() -> registrarRetorno(id, resposta));
+        String chaveAcesso = QuarkusTransaction.requiringNew().call(() -> registrarRetorno(id, resposta));
+        consultaStatus.invalidar(chaveAcesso);
         LOG.infof("Nota %d: %s", id, resposta.descricao());
     }
 
@@ -105,7 +112,7 @@ public class EmissaoService {
         }
     }
 
-    private void registrarRetorno(Long id, RespostaSefaz resposta) {
+    private String registrarRetorno(Long id, RespostaSefaz resposta) {
         NotaFiscal nota = NotaFiscal.findById(id);
         if (resposta.autorizada()) {
             nota.status = StatusNota.AUTORIZADA;
@@ -117,6 +124,7 @@ public class EmissaoService {
             nota.status = StatusNota.REJEITADA;
             nota.motivo = resposta.descricao();
         }
+        return nota.chaveAcesso;
     }
 
     private record Pendente(Long id, String recibo) {

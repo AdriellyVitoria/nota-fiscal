@@ -13,7 +13,7 @@ Emissor simplificado de Nota Fiscal Eletrônica, construído para praticar Java,
 ## Como rodar
 
 ```shell
-docker compose up -d --build   # PostgreSQL (5433), SEFAZ no WildFly (8180), Kafka (9092)
+docker compose up -d --build   # PostgreSQL (5433), SEFAZ no WildFly (8180), Kafka (9092), Infinispan (11222)
 cd nfe-api
 ./mvnw quarkus:dev             # API em http://localhost:8081
 ```
@@ -23,6 +23,7 @@ cd nfe-api
 | http://localhost:8081/q/swagger-ui | Swagger da API |
 | http://localhost:8180/sefaz-mock/NFeAutorizacao?wsdl | WSDL do SEFAZ simulado |
 | http://localhost:9991 | Console de administração do WildFly |
+| http://localhost:11222 | Console do Infinispan (admin / admin) |
 
 ## Fluxo de emissão
 
@@ -32,3 +33,4 @@ cd nfe-api
 4. Ao autorizar, o evento é gravado no outbox e publicado no tópico Kafka `nfe-autorizada` (3 partições)
 5. O consumidor de auditoria registra o evento — `GET /auditoria`
 6. `GET /notas/{id}/danfe` mostra o DANFE
+7. `GET /consulta/{chaveAcesso}` consulta o status com cache no Infinispan (header `X-Cache: HIT` ou `MISS`)
