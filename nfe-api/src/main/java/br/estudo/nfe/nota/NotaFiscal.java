@@ -69,6 +69,12 @@ public class NotaFiscal extends PanacheEntityBase {
     @Column(columnDefinition = "text")
     public String xml;
 
+    @Column(name = "criada_por", length = 100)
+    public String criadaPor;
+
+    @Column(name = "emitida_por", length = 100)
+    public String emitidaPor;
+
     public void adicionarItem(ItemNota item) {
         item.nota = this;
         itens.add(item);

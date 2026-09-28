@@ -27,6 +27,18 @@ services:
     ports:
       - "11222:11222"
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: nfe-keycloak
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
+    ports:
+      - "8280:8080"
+
   kafka:
     image: apache/kafka:latest
     container_name: nfe-kafka

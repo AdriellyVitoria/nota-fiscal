@@ -3,6 +3,8 @@ package br.estudo.nfe.produto;
 import java.net.URI;
 import java.util.List;
 
+import br.estudo.nfe.seguranca.Perfis;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
@@ -13,6 +15,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 
+@RolesAllowed({ Perfis.EMISSOR, Perfis.CONSULTA })
 @Path("/produtos")
 public class ProdutoResource {
 
@@ -30,6 +33,7 @@ public class ProdutoResource {
         return ProdutoResponse.de(service.buscar(id));
     }
 
+    @RolesAllowed(Perfis.EMISSOR)
     @POST
     public Response criar(@Valid ProdutoRequest dados) {
         Produto produto = service.criar(dados);
@@ -38,12 +42,14 @@ public class ProdutoResource {
                 .build();
     }
 
+    @RolesAllowed(Perfis.EMISSOR)
     @PUT
     @Path("/{id}")
     public ProdutoResponse atualizar(@PathParam("id") Long id, @Valid ProdutoRequest dados) {
         return ProdutoResponse.de(service.atualizar(id, dados));
     }
 
+    @RolesAllowed(Perfis.EMISSOR)
     @DELETE
     @Path("/{id}")
     public void remover(@PathParam("id") Long id) {

@@ -17,6 +17,7 @@ import br.estudo.nfe.xml.NotaXmlMapper;
 import br.estudo.nfe.xml.XmlService;
 import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.quarkus.scheduler.Scheduled;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -45,12 +46,16 @@ public class EmissaoService {
     @Inject
     ConsultaStatusService consultaStatus;
 
+    @Inject
+    SecurityIdentity identidade;
+
     public NotaFiscal emitir(Long id) {
         NotaFiscal nota = notas.buscar(id);
         if (!PODE_EMITIR.contains(nota.status)) {
             throw new NegocioException("Só é possível emitir nota em RASCUNHO ou REJEITADA (status atual: " + nota.status + ")");
         }
 
+        String usuario = identidade.getPrincipal().getName();
         String xml = xmlService.gerar(xmlMapper.mapear(nota));
         List<String> erros = xmlService.validar(xml);
         if (!erros.isEmpty()) {
@@ -66,7 +71,7 @@ public class EmissaoService {
         }
 
         NotaFiscal atualizada = QuarkusTransaction.requiringNew().call(() -> {
-            registrarEnvio(id, xml, resposta);
+            registrarEnvio(id, xml, resposta, usuario);
             return NotaFiscal.buscarCompleta(id).orElseThrow();
         });
         consultaStatus.invalidar(atualizada.chaveAcesso);
@@ -99,9 +104,10 @@ public class EmissaoService {
         LOG.infof("Nota %d: %s", id, resposta.descricao());
     }
 
-    private void registrarEnvio(Long id, String xml, RespostaSefaz resposta) {
+    private void registrarEnvio(Long id, String xml, RespostaSefaz resposta, String usuario) {
         NotaFiscal nota = NotaFiscal.findById(id);
         nota.xml = xml;
+        nota.emitidaPor = usuario;
         if (resposta.loteRecebido()) {
             nota.status = StatusNota.ENVIADA;
             nota.recibo = resposta.recibo();

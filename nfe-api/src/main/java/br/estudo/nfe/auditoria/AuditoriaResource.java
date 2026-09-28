@@ -4,10 +4,13 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import br.estudo.nfe.seguranca.Perfis;
 import io.quarkus.panache.common.Sort;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 
+@RolesAllowed({ Perfis.EMISSOR, Perfis.CONSULTA })
 @Path("/auditoria")
 public class AuditoriaResource {
 

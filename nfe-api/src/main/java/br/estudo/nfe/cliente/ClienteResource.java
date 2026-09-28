@@ -3,6 +3,8 @@ package br.estudo.nfe.cliente;
 import java.net.URI;
 import java.util.List;
 
+import br.estudo.nfe.seguranca.Perfis;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
@@ -11,6 +13,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 
+@RolesAllowed({ Perfis.EMISSOR, Perfis.CONSULTA })
 @Path("/clientes")
 public class ClienteResource {
 
@@ -28,6 +31,7 @@ public class ClienteResource {
         return ClienteResponse.de(service.buscar(id));
     }
 
+    @RolesAllowed(Perfis.EMISSOR)
     @POST
     public Response criar(@Valid ClienteRequest dados) {
         Cliente cliente = service.criar(dados);

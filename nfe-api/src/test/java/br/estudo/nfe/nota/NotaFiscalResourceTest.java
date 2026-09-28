@@ -8,9 +8,11 @@ import static org.hamcrest.Matchers.hasSize;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
+@TestSecurity(user = "maria", roles = "emissor")
 class NotaFiscalResourceTest {
 
     @Test

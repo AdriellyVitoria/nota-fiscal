@@ -21,10 +21,12 @@ import br.estudo.nfe.sefaz.SefazClient;
 import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 import jakarta.inject.Inject;
 
 @QuarkusTest
+@TestSecurity(user = "maria", roles = "emissor")
 class EventoKafkaTest {
 
     @InjectMock

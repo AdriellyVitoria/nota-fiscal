@@ -17,6 +17,7 @@ import br.estudo.nfe.xml.NotaXmlMapper;
 import br.estudo.nfe.xml.XmlService;
 import io.quarkus.hibernate.orm.panache.Panache;
 import io.quarkus.narayana.jta.QuarkusTransaction;
+import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -46,6 +47,9 @@ public class NotaFiscalService {
     @Inject
     ConsultaStatusService consultaStatus;
 
+    @Inject
+    SecurityIdentity identidade;
+
     public List<NotaFiscal> listar(StatusNota status, int pagina, int tamanho) {
         return NotaFiscal.listar(status, pagina, tamanho);
     }
@@ -65,6 +69,7 @@ public class NotaFiscalService {
         nota.serie = emitente.serie();
         nota.numero = proximoNumero();
         nota.dataEmissao = OffsetDateTime.now(FUSO_BRASILIA);
+        nota.criadaPor = identidade.getPrincipal().getName();
 
         for (CriarNotaRequest.Item pedidoItem : pedido.itens()) {
             Produto produto = Produto.<Produto>findByIdOptional(pedidoItem.produtoId())

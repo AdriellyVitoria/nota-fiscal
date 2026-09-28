@@ -3,6 +3,8 @@ package br.estudo.nfe.nota;
 import java.net.URI;
 import java.util.List;
 
+import br.estudo.nfe.seguranca.Perfis;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -18,6 +20,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+@RolesAllowed({ Perfis.EMISSOR, Perfis.CONSULTA })
 @Path("/notas")
 public class NotaFiscalResource {
 
@@ -61,6 +64,7 @@ public class NotaFiscalResource {
         return service.danfe(id);
     }
 
+    @RolesAllowed(Perfis.EMISSOR)
     @POST
     public Response criar(@Valid CriarNotaRequest pedido) {
         NotaFiscal nota = service.criar(pedido);
@@ -69,6 +73,7 @@ public class NotaFiscalResource {
                 .build();
     }
 
+    @RolesAllowed(Perfis.EMISSOR)
     @POST
     @Path("/{id}/emitir")
     public Response emitir(@PathParam("id") Long id) {
@@ -76,6 +81,7 @@ public class NotaFiscalResource {
         return Response.accepted(NotaResponse.de(nota)).build();
     }
 
+    @RolesAllowed(Perfis.EMISSOR)
     @DELETE
     @Path("/{id}")
     public void excluir(@PathParam("id") Long id) {

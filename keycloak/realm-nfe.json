@@ -1,0 +1,120 @@
+{
+  "realm": "nfe",
+  "enabled": true,
+  "displayName": "NF-e Estudo",
+  "accessTokenLifespan": 300,
+  "roles": {
+    "realm": [
+      { "name": "emissor", "description": "Cadastra, cria e emite notas fiscais" },
+      { "name": "consulta", "description": "Apenas consulta notas e cadastros" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "nfe-api",
+      "name": "API de NF-e (resource server)",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "nfe-api-secret",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false
+    },
+    {
+      "clientId": "nfe-frontend",
+      "name": "Frontend Vue.js",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": ["http://localhost:5173/*"],
+      "webOrigins": ["http://localhost:5173"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:5173/*"
+      },
+      "protocolMappers": [
+        {
+          "name": "audience-nfe-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.client.audience": "nfe-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "nfe-integracao",
+      "name": "Integração sistema-a-sistema (ERP)",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "nfe-integracao-secret",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "protocolMappers": [
+        {
+          "name": "audience-nfe-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.client.audience": "nfe-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "nfe-dev-cli",
+      "name": "Somente desenvolvimento: login por senha via terminal",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "protocolMappers": [
+        {
+          "name": "audience-nfe-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.client.audience": "nfe-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "maria",
+      "enabled": true,
+      "email": "maria@nfe.local",
+      "emailVerified": true,
+      "firstName": "Maria",
+      "lastName": "Emissora",
+      "credentials": [{ "type": "password", "value": "maria", "temporary": false }],
+      "realmRoles": ["emissor"]
+    },
+    {
+      "username": "joao",
+      "enabled": true,
+      "email": "joao@nfe.local",
+      "emailVerified": true,
+      "firstName": "Joao",
+      "lastName": "Consulta",
+      "credentials": [{ "type": "password", "value": "joao", "temporary": false }],
+      "realmRoles": ["consulta"]
+    },
+    {
+      "username": "service-account-nfe-integracao",
+      "enabled": true,
+      "serviceAccountClientId": "nfe-integracao",
+      "realmRoles": ["emissor"]
+    }
+  ]
+}

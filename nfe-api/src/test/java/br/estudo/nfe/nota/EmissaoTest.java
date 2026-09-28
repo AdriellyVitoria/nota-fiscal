@@ -14,11 +14,13 @@ import br.estudo.nfe.sefaz.RespostaSefaz;
 import br.estudo.nfe.sefaz.SefazClient;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.http.ContentType;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.ProcessingException;
 
 @QuarkusTest
+@TestSecurity(user = "maria", roles = "emissor")
 class EmissaoTest {
 
     @InjectMock

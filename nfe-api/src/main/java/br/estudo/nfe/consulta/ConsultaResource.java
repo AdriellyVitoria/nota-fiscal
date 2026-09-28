@@ -1,6 +1,8 @@
 package br.estudo.nfe.consulta;
 
 import br.estudo.nfe.consulta.ConsultaStatusService.ResultadoConsulta;
+import br.estudo.nfe.seguranca.Perfis;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.GET;
@@ -8,6 +10,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 
+@RolesAllowed({ Perfis.EMISSOR, Perfis.CONSULTA })
 @Path("/consulta")
 public class ConsultaResource {
 
