@@ -14,6 +14,7 @@ public record NotaResponse(
         String clienteNome,
         BigDecimal valorTotal,
         OffsetDateTime dataEmissao,
+        String recibo,
         String protocolo,
         String motivo,
         List<Item> itens) {
@@ -31,6 +32,6 @@ public record NotaResponse(
                 .map(i -> new Item(i.produto.codigo, i.produto.descricao, i.quantidade, i.valorUnitario, i.valorTotal))
                 .toList();
         return new NotaResponse(n.id, n.numero, n.serie, n.chaveAcesso, n.status,
-                n.cliente.id, n.cliente.nome, n.valorTotal, n.dataEmissao, n.protocolo, n.motivo, itens);
+                n.cliente.id, n.cliente.nome, n.valorTotal, n.dataEmissao, n.recibo, n.protocolo, n.motivo, itens);
     }
 }

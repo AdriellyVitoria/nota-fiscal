@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.estudo.br/sefaz" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="NFeAutorizacao" targetNamespace="http://www.estudo.br/sefaz">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.estudo.br/sefaz" elementFormDefault="unqualified" targetNamespace="http://www.estudo.br/sefaz" version="1.0">
+
+  <xs:element name="consultarRecibo" type="tns:consultarRecibo"/>
+
+  <xs:element name="consultarReciboResponse" type="tns:consultarReciboResponse"/>
+
+  <xs:element name="enviarNFe" type="tns:enviarNFe"/>
+
+  <xs:element name="enviarNFeResponse" type="tns:enviarNFeResponse"/>
+
+  <xs:complexType name="enviarNFe">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="xml" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="enviarNFeResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="retorno" type="tns:retornoEnvio"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="retornoEnvio">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoStatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="motivo" type="xs:string"/>
+      <xs:element minOccurs="0" name="recibo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="consultarRecibo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="recibo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="consultarReciboResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="retorno" type="tns:retornoConsulta"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="retornoConsulta">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="codigoStatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="motivo" type="xs:string"/>
+      <xs:element minOccurs="0" name="chaveAcesso" type="xs:string"/>
+      <xs:element minOccurs="0" name="protocolo" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="enviarNFeResponse">
+    <wsdl:part element="tns:enviarNFeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="consultarRecibo">
+    <wsdl:part element="tns:consultarRecibo" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="enviarNFe">
+    <wsdl:part element="tns:enviarNFe" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="consultarReciboResponse">
+    <wsdl:part element="tns:consultarReciboResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="NFeAutorizacao">
+    <wsdl:operation name="enviarNFe">
+      <wsdl:input message="tns:enviarNFe" name="enviarNFe">
+    </wsdl:input>
+      <wsdl:output message="tns:enviarNFeResponse" name="enviarNFeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="consultarRecibo">
+      <wsdl:input message="tns:consultarRecibo" name="consultarRecibo">
+    </wsdl:input>
+      <wsdl:output message="tns:consultarReciboResponse" name="consultarReciboResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NFeAutorizacaoSoapBinding" type="tns:NFeAutorizacao">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="enviarNFe">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="enviarNFe">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="enviarNFeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="consultarRecibo">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="consultarRecibo">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="consultarReciboResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="NFeAutorizacao">
+    <wsdl:port binding="tns:NFeAutorizacaoSoapBinding" name="NFeAutorizacaoPort">
+      <soap:address location="http://localhost:8180/sefaz-mock/NFeAutorizacao"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

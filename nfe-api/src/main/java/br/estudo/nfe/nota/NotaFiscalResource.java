@@ -24,6 +24,9 @@ public class NotaFiscalResource {
     @Inject
     NotaFiscalService service;
 
+    @Inject
+    EmissaoService emissao;
+
     @GET
     public List<NotaResumoResponse> listar(
             @QueryParam("status") StatusNota status,
@@ -64,6 +67,13 @@ public class NotaFiscalResource {
         return Response.created(URI.create("/notas/" + nota.id))
                 .entity(NotaResponse.de(nota))
                 .build();
+    }
+
+    @POST
+    @Path("/{id}/emitir")
+    public Response emitir(@PathParam("id") Long id) {
+        NotaFiscal nota = emissao.emitir(id);
+        return Response.accepted(NotaResponse.de(nota)).build();
     }
 
     @DELETE

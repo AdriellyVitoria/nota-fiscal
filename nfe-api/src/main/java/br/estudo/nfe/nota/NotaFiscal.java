@@ -58,6 +58,9 @@ public class NotaFiscal extends PanacheEntityBase {
     public OffsetDateTime dataEmissao;
 
     @Column(length = 20)
+    public String recibo;
+
+    @Column(length = 20)
     public String protocolo;
 
     @Column(length = 255)
