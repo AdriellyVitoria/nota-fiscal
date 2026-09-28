@@ -7,9 +7,16 @@ services:
       POSTGRES_USER: nfe
       POSTGRES_PASSWORD: nfe
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  sefaz:
+    build: ./sefaz-mock
+    container_name: nfe-sefaz
+    ports:
+      - "8180:8080"
+      - "9991:9990"
 
 volumes:
   pgdata:
