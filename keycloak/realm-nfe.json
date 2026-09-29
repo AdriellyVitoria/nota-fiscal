@@ -2,6 +2,9 @@
   "realm": "nfe",
   "enabled": true,
   "displayName": "NF-e Estudo",
+  "internationalizationEnabled": true,
+  "supportedLocales": ["pt-BR"],
+  "defaultLocale": "pt-BR",
   "accessTokenLifespan": 300,
   "roles": {
     "realm": [
