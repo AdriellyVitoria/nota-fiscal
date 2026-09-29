@@ -16,10 +16,16 @@ Emissor simplificado de Nota Fiscal Eletrônica, construído para praticar Java,
 docker compose up -d --build   # PostgreSQL (5433), SEFAZ no WildFly (8180), Kafka (9092), Infinispan (11222), Keycloak (8280)
 cd nfe-api
 ./mvnw quarkus:dev             # API em http://localhost:8081
+
+# em outro terminal
+cd nfe-frontend
+npm install
+npm run dev                    # tela em http://localhost:5173 (login: maria / maria)
 ```
 
 | Endereço | O quê |
 |---|---|
+| http://localhost:5173 | **Frontend** (Vue.js) |
 | http://localhost:8081/q/swagger-ui | Swagger da API |
 | http://localhost:8180/sefaz-mock/NFeAutorizacao?wsdl | WSDL do SEFAZ simulado |
 | http://localhost:9991 | Console de administração do WildFly |
